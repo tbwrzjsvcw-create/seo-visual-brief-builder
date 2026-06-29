@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEO 视觉 Brief Builder - V3 可点击原型</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f5f6;
+      --surface: #ffffff;
+      --surface-2: #f8f8f7;
+      --surface-3: #eef1f4;
+      --ink: #171717;
+      --text: #2b2d30;
+      --muted: #6f7378;
+      --quiet: #9ba0a6;
+      --line: #dcdfe4;
+      --line-strong: #bfc5cd;
+      --accent: #e96f57;
+      --green: #24705b;
+      --blue: #426987;
+      --amber: #9d741f;
+      --red: #b64a3b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+      background: none;
+    }
+
+    .topbar {
+      min-height: 64px;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: rgba(244, 245, 246, .92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 820;
+      flex: 0 0 auto;
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      font-size: 15px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      min-height: 36px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      font-size: 13px;
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+
+    .btn.text {
+      background: transparent;
+      border-color: transparent;
+      color: var(--muted);
+    }
+
+    .stepbar {
+      padding: 14px 28px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step {
+      min-height: 62px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      text-align: left;
+      display: grid;
+      gap: 5px;
+    }
+
+    .step strong {
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step.active {
+      border-color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--ink);
+      background: #fbfbfb;
+    }
+
+    .step.done strong {
+      color: var(--green);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 304px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 28px 32px;
+    }
+
+    .sidebar,
+    .stage-card,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .sidebar {
+      align-self: start;
+      position: sticky;
+      top: 96px;
+      overflow: hidden;
+    }
+
+    .side-section {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-section:last-child {
+      border-bottom: 0;
+    }
+
+    .section-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      min-height: 38px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 180px;
+      line-height: 1.55;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 3px rgba(23, 23, 23, .08);
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .chip {
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 740;
+      white-space: nowrap;
+    }
+
+    .chip.good {
+      color: var(--green);
+      border-color: rgba(36, 112, 91, .22);
+      background: #e9f2ef;
+    }
+
+    .chip.warn {
+      color: var(--amber);
+      border-color: rgba(157, 116, 31, .22);
+      background: #fff3d8;
+    }
+
+    .chip.danger {
+      color: var(--red);
+      border-color: rgba(182, 74, 59, .24);
+      background: #ffe9e4;
+    }
+
+    .chip.blue {
+      color: var(--blue);
+      border-color: rgba(66, 105, 135, .22);
+      background: #e9eef3;
+    }
+
+    .profile-card {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-2);
+    }
+
+    .profile-card strong {
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .profile-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-item {
+      width: 100%;
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .nav-item.active {
+      border-color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--ink);
+    }
+
+    .nav-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .nav-top strong {
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .nav-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .stage-card {
+      display: none;
+      overflow: hidden;
+    }
+
+    .stage-card.active {
+      display: block;
+    }
+
+    .stage-head {
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .stage-title {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .stage-title h1 {
+      margin: 0;
+      font-size: clamp(22px, 2.2vw, 32px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .stage-title p {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .stage-body {
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .75fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card h2,
+    .card h3 {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .card h2 {
+      font-size: 17px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .module-result {
+      display: grid;
+      gap: 8px;
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .result-row strong {
+      font-size: 13px;
+    }
+
+    .result-row span {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .summary {
+      min-height: 112px;
+      align-content: start;
+    }
+
+    .task-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .asset-bound {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-2);
+    }
+
+    .thumb {
+      width: 110px;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, #d4dce0 0 34%, #e9dfd8 34% 66%, #c5d2dc 66%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      right: 15px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.7);
+    }
+
+    .asset-copy {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .asset-copy strong {
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .rules {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rule {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      display: grid;
+      gap: 6px;
+    }
+
+    .rule strong {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+    }
+
+    .rule p {
+      color: var(--text);
+    }
+
+    .brief-box {
+      border-left: 3px solid var(--ink);
+      background: var(--surface-2);
+    }
+
+    .prompt-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      display: grid;
+      gap: 10px;
+    }
+
+    .prompt-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .prompt-text {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      color: #303236;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
+    .template-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .template-item {
+      display: grid;
+      grid-template-columns: 136px minmax(0, 1fr);
+      gap: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .template-thumb,
+    .preview-frame {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfbfb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .template-thumb {
+      aspect-ratio: 4 / 3;
+    }
+
+    .preview-frame {
+      aspect-ratio: 16 / 10;
+    }
+
+    .slot-after,
+    .slot-before {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: #333;
+      font-size: 12px;
+    }
+
+    .slot-after {
+      right: 10px;
+      top: 14px;
+      width: 62%;
+      height: 68%;
+      background: #b7bdbb;
+    }
+
+    .slot-before {
+      left: 10px;
+      bottom: 14px;
+      width: 38%;
+      height: 44%;
+      background: #e6e2dc;
+      border: 2px solid #fff;
+      box-shadow: 0 10px 18px rgba(22,22,22,.12);
+    }
+
+    .preview-frame .slot-after {
+      right: 24px;
+      top: 28px;
+      width: 56%;
+      height: 68%;
+    }
+
+    .preview-frame .slot-before {
+      left: 26px;
+      bottom: 34px;
+      width: 38%;
+      height: 42%;
+    }
+
+    .notice {
+      padding: 13px;
+      border: 1px solid rgba(182,74,59,.24);
+      border-radius: var(--radius);
+      background: #ffe9e4;
+      color: #81372b;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1120px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .stepbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px;
+      }
+
+      .stepbar,
+      .layout {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .stepbar,
+      .grid-2,
+      .grid-3,
+      .task-layout,
+      .template-layout,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stage-head,
+      .asset-bound,
+      .template-item {
+        grid-template-columns: 1fr;
+      }
+
+      .thumb {
+        width: 100%;
+        max-width: 180px;
+      }
+
+      .result-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">AB</div>
+      <div class="brand-copy">
+        <strong>SEO 视觉 Brief Builder</strong>
+        <span>V3 可点击原型 / 文案解析、任务素材、Prompt、模板导出</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn text">历史项目</button>
+      <button class="btn">保存</button>
+      <button class="btn primary">导出项目</button>
+    </div>
+  </header>
+
+  <nav class="stepbar" aria-label="工作阶段">
+    <button class="step active" data-stage="copy">
+      <strong>1. 文案解析</strong>
+      <span>粘贴 Google Sheet 文案</span>
+    </button>
+    <button class="step" data-stage="asset">
+      <strong>2. 任务与素材</strong>
+      <span>绑定参考图和生产路径</span>
+    </button>
+    <button class="step" data-stage="prompt">
+      <strong>3. Brief & Prompt</strong>
+      <span>先策略，后咒语</span>
+    </button>
+    <button class="step" data-stage="template">
+      <strong>4. 模板与导出</strong>
+      <span>套版式、预览、命名</span>
+    </button>
+  </nav>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="side-section">
+        <div class="section-kicker">项目设置</div>
+        <div class="field">
+          <label for="project">页面名称</label>
+          <input id="project" value="Auto Color Correction">
+        </div>
+        <div class="field">
+          <label for="brand-profile">品牌 Profile</label>
+          <select id="brand-profile">
+            <option value="ab-consumer">AB / 大众创作者（ABM · ABW）</option>
+            <option value="ab-pro">AB / 专业影像（ABS）</option>
+            <option value="custom">自定义品牌 Profile</option>
+          </select>
+        </div>
+        <div class="profile-card" id="profile-card">
+          <strong>AB / 大众创作者</strong>
+          <p>面向欧美大众用户和内容创作者。强调生活化、社交媒体感、情绪连接和自然变美。</p>
+          <div class="chips">
+            <span class="chip good">lifestyle</span>
+            <span class="chip blue">creator</span>
+            <span class="chip">轻工具感</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="side-section">
+        <div class="section-kicker">模块与任务</div>
+        <div class="nav-list">
+          <button class="nav-item">
+            <div class="nav-top">
+              <strong>Hero</strong>
+              <span class="chip">1</span>
+            </div>
+            <p>主视觉，1 组 B/A</p>
+          </button>
+          <button class="nav-item active">
+            <div class="nav-top">
+              <strong>What</strong>
+              <span class="chip good">3</span>
+            </div>
+            <p>3 张场景图，当前查看 What 2</p>
+          </button>
+          <button class="nav-item">
+            <div class="nav-top">
+              <strong>How To</strong>
+              <span class="chip">1</span>
+            </div>
+            <p>流程组合图</p>
+          </button>
+          <button class="nav-item">
+            <div class="nav-top">
+              <strong>All Tools</strong>
+              <span class="chip blue">复用</span>
+            </div>
+            <p>缩略图，可复用 Hero</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="side-section">
+        <div class="section-kicker">当前任务</div>
+        <div class="nav-list">
+          <button class="nav-item">
+            <div class="nav-top">
+              <strong>What 1</strong>
+              <span class="chip warn">缺素材</span>
+            </div>
+            <p>Fix Colored Lighting</p>
+          </button>
+          <button class="nav-item active">
+            <div class="nav-top">
+              <strong>What 2</strong>
+              <span class="chip good">已绑定</span>
+            </div>
+            <p>Concert and Low-Light Photos</p>
+          </button>
+          <button class="nav-item">
+            <div class="nav-top">
+              <strong>What 3</strong>
+              <span class="chip">未生成</span>
+            </div>
+            <p>Realistic Skin Tones</p>
+          </button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="main">
+      <article class="stage-card active" data-panel="copy">
+        <div class="stage-head">
+          <div class="stage-title">
+            <h1>文案解析</h1>
+            <p>这里就是第一步的输入入口：从 Google Sheet 粘贴整页 SEO 文案，系统先拆出页面模块和每个模块需要几张图。</p>
+          </div>
+          <button class="btn primary" id="parse-btn">解析文案</button>
+        </div>
+        <div class="stage-body grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h2>SEO 文案</h2>
+              <span class="chip blue">可粘贴整页</span>
+            </div>
+            <textarea id="copy-input">SEO Title: Free Auto Color Correction with AI
+Meta description: Fix dull, faded, or unbalanced photos instantly with free AI auto color correction.
+H1: Auto Color Correction Online with AI
+Intro: Fix dull, tinted, or poorly lit photos instantly with AI Auto Color Correction.
+
+what2.h2.1: Fix Colored Lighting and Restore Natural Photo Colors
+what2.h2.2: Restore Natural Colors in Concert and Low-Light Photos
+what2.h2.3: Balance Heavy Color Tints and Enhance Realistic Skin Tones
+
+how2.h2: How to use Auto Color Correction?
+tools.h2: All Online Photo & Video Editing Tools</textarea>
+            <p class="helper">V1 先支持粘贴。后续再接 Google Sheet 导入。</p>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h2>解析结果</h2>
+              <span class="chip good" id="parse-status">示例已解析</span>
+            </div>
+            <div class="module-result">
+              <div class="result-row">
+                <strong>Hero</strong>
+                <span>Auto Color Correction Online with AI</span>
+                <span class="chip">1 张</span>
+              </div>
+              <div class="result-row">
+                <strong>What</strong>
+                <span>3 个 H2 场景，各 1 组 B/A</span>
+                <span class="chip good">3 张</span>
+              </div>
+              <div class="result-row">
+                <strong>How To</strong>
+                <span>上传、自动校正、预览下载</span>
+                <span class="chip">1 张</span>
+              </div>
+              <div class="result-row">
+                <strong>All Tools</strong>
+                <span>工具入口缩略图</span>
+                <span class="chip blue">1 张</span>
+              </div>
+            </div>
+            <button class="btn primary" data-go="asset">选择模块并绑定素材</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="stage-card" data-panel="asset">
+        <div class="stage-head">
+          <div class="stage-title">
+            <h1>任务与素材</h1>
+            <p>素材池不单独作为大模块铺开，而是跟当前视觉任务绑定。每个视觉任务默认需要一张参考图，也可以从素材池复用。</p>
+          </div>
+          <button class="btn primary" data-go="prompt">进入 Prompt 阶段</button>
+        </div>
+        <div class="stage-body">
+          <section class="grid-3">
+            <div class="card summary">
+              <h3>视觉目标</h3>
+              <p>展示低光演唱会照片从偏蓝、偏暗、不自然，恢复到清晰、自然、仍保留现场氛围。</p>
+            </div>
+            <div class="card summary">
+              <h3>图片数量</h3>
+              <p>1 组 before / after，适合 What 模块中尺寸配图。</p>
+            </div>
+            <div class="card summary">
+              <h3>版式约束</h3>
+              <p>主体不要太满，给小 before 浮层、标签或箭头留出空间。</p>
+            </div>
+          </section>
+
+          <section class="task-layout">
+            <div class="card">
+              <div class="card-head">
+                <h2>绑定素材</h2>
+                <div class="chips">
+                  <span class="chip danger">不可导出</span>
+                  <span class="chip warn">生成新 after</span>
+                  <span class="chip">反推 before</span>
+                </div>
+              </div>
+              <div class="asset-bound">
+                <div class="thumb"></div>
+                <div class="asset-copy">
+                  <strong>concert-light-reference.jpg</strong>
+                  <p>来源无法判断，已自动按「不可商用 + 作为参考」处理。它只提供场景、光线、构图和氛围，不进入最终导出。</p>
+                  <div class="chips">
+                    <span class="chip warn">无法判断</span>
+                    <span class="chip danger">仅参考</span>
+                    <span class="chip">低光</span>
+                    <span class="chip">彩色灯光</span>
+                  </div>
+                </div>
+                <button class="btn">换图</button>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="source">图片来源</label>
+                  <select id="source">
+                    <option value="unknown">无法判断</option>
+                    <option value="commercial">可商用</option>
+                    <option value="non-commercial">不可商用</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="role">图片角色</label>
+                  <select id="role" disabled>
+                    <option>作为参考</option>
+                    <option>作为 after</option>
+                    <option>作为 before</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="tags">图片标签</label>
+                <textarea id="tags">年轻女性, 室内夜间活动, 彩色舞台灯光, 近景人像, 社交媒体感, 低光, 蓝紫色偏</textarea>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>生产规则</h2>
+              <div class="rules">
+                <div class="rule">
+                  <strong>当前路径</strong>
+                  <p>参考图 -> 新 AI after 图 -> before reverse prompt</p>
+                </div>
+                <div class="rule">
+                  <strong>允许改变</strong>
+                  <p>光线、白平衡、色彩偏移、肤色自然度、整体清晰度。</p>
+                </div>
+                <div class="rule">
+                  <strong>必须锁定</strong>
+                  <p>人物身份、姿势、服装、镜头角度、背景主体结构和构图。</p>
+                </div>
+                <div class="rule">
+                  <strong>避免</strong>
+                  <p>过度磨皮、换脸、年龄变化、棚拍质感、强商业图库感。</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <article class="stage-card" data-panel="prompt">
+        <div class="stage-head">
+          <div class="stage-title">
+            <h1>Brief & Prompt</h1>
+            <p>Brief 是统一策略，Prompt 是执行咒语。两者不是同一个层级，所以这里先显示策略，再显示具体 prompt。</p>
+          </div>
+          <button class="btn primary" data-go="template">进入模板阶段</button>
+        </div>
+        <div class="stage-body grid-2">
+          <div class="card brief-box">
+            <h2>统一 Brief</h2>
+            <p>模块：What 2。目标：展示 Auto Color Correction 对演唱会和低光照片的色彩修复能力。风格：AB 大众创作者 Profile，生活化、社交媒体感、真实现场氛围。风险：不要做成专业棚拍；不要让 after 过度美颜或丢失现场氛围。</p>
+            <div class="chips">
+              <span class="chip good">策略层</span>
+              <span class="chip">给设计师看</span>
+              <span class="chip blue">约束 prompt</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Prompt 列表</h2>
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <strong>图片分析 Prompt</strong>
+                <button class="btn">复制</button>
+              </div>
+              <p class="prompt-text">请分析这张参考图的视觉元素，重点包括人物类型、年龄感、肤色、五官、妆容、服饰、动作姿势、拍摄角度、背景、光线、色调和整体风格。请输出一段适合 AI 生图的中文描述，保持原图的场景气质和构图逻辑，但不要复制原图身份。</p>
+            </div>
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <strong>After Prompt</strong>
+                <button class="btn">复制</button>
+              </div>
+              <p class="prompt-text">生成一张适合 AB 大众创作者 Profile 的生活化演唱会低光人像照片。画面有真实社交媒体照片质感，人物自然、年轻、有现场情绪，背景包含柔和舞台灯光和夜间活动氛围。after 状态需要呈现自然肤色、平衡白平衡、清晰明亮但不过度锐化，保留演唱会现场的蓝紫色氛围。</p>
+            </div>
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <strong>Before Reverse Prompt</strong>
+                <button class="btn">复制</button>
+              </div>
+              <p class="prompt-text">基于 after 图反推 before。保持同一个人物、同一姿势、同一服装、同一背景、同一拍摄角度和同一构图。只改变色彩和光线问题：加入明显蓝紫色偏、低光、白平衡不准、肤色偏冷、局部阴影和轻微灰暗感。不要改变人物身份、年龄、表情、场景或主体结构。</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="stage-card" data-panel="template">
+        <div class="stage-head">
+          <div class="stage-title">
+            <h1>模板与导出</h1>
+            <p>这一步发生在生图之后。这里再选择版式、套入 before / after、查看预览，并按照模块命名导出。</p>
+          </div>
+          <button class="btn primary">导出当前任务</button>
+        </div>
+        <div class="stage-body template-layout">
+          <div class="card">
+            <h2>模板推荐</h2>
+            <div class="template-item">
+              <div class="template-thumb">
+                <div class="slot-after">After</div>
+                <div class="slot-before">Before</div>
+              </div>
+              <div>
+                <h3>大 After + 小 Before 浮层</h3>
+                <p>适合 What 场景说明图。after 信息完整，before 作为问题提示。</p>
+                <div class="chips">
+                  <span class="chip good">推荐</span>
+                  <span class="chip">1 组 B/A</span>
+                  <span class="chip">16:10</span>
+                </div>
+              </div>
+            </div>
+            <div class="template-item">
+              <div class="template-thumb">
+                <div class="slot-before" style="left:10px; top:12px; bottom:auto; width:45%; height:68%;">Before</div>
+                <div class="slot-after" style="right:10px; top:12px; width:45%; height:68%;">After</div>
+              </div>
+              <div>
+                <h3>左右对比</h3>
+                <p>适合功能差异需要一眼看清的场景，但画面会更工具化。</p>
+                <div class="chips">
+                  <span class="chip">备选</span>
+                  <span class="chip">强对比</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>简单预览</h2>
+            <div class="preview-frame">
+              <div class="slot-after">After</div>
+              <div class="slot-before">Before</div>
+            </div>
+            <div class="chips">
+              <span class="chip blue">auto-color-correction_what_02_layout</span>
+            </div>
+            <div class="notice">当前素材来源无法判断，最终导出必须使用重新生成的 AI 图。</div>
+            <button class="btn primary">导出当前任务</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const steps = Array.from(document.querySelectorAll(".step"));
+    const panels = Array.from(document.querySelectorAll(".stage-card"));
+    const goButtons = Array.from(document.querySelectorAll("[data-go]"));
+    const parseButton = document.querySelector("#parse-btn");
+    const parseStatus = document.querySelector("#parse-status");
+    const profileSelect = document.querySelector("#brand-profile");
+    const profileCard = document.querySelector("#profile-card");
+    const sourceSelect = document.querySelector("#source");
+    const roleSelect = document.querySelector("#role");
+
+    const profiles = {
+      "ab-consumer": {
+        title: "AB / 大众创作者",
+        copy: "面向欧美大众用户和内容创作者。强调生活化、社交媒体感、情绪连接和自然变美。",
+        chips: ["lifestyle", "creator", "轻工具感"]
+      },
+      "ab-pro": {
+        title: "AB / 专业影像",
+        copy: "面向专业摄影师和更严肃的影像工作流。强调克制、摄影质感、可信和精修效率。",
+        chips: ["studio quality", "professional", "克制"]
+      },
+      custom: {
+        title: "自定义品牌 Profile",
+        copy: "用于未来接入其他产品。需要定义用户对象、视觉气质、素材边界、禁用方向和 prompt 关键词。",
+        chips: ["可扩展", "需配置", "多产品"]
+      }
+    };
+
+    function showStage(stageName) {
+      steps.forEach((step) => {
+        const active = step.dataset.stage === stageName;
+        step.classList.toggle("active", active);
+        if (active) step.classList.add("done");
+      });
+
+      panels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === stageName);
+      });
+    }
+
+    steps.forEach((step) => {
+      step.addEventListener("click", () => showStage(step.dataset.stage));
+    });
+
+    goButtons.forEach((button) => {
+      button.addEventListener("click", () => showStage(button.dataset.go));
+    });
+
+    parseButton.addEventListener("click", () => {
+      parseStatus.textContent = "已重新解析";
+      parseStatus.classList.add("good");
+      showStage("asset");
+    });
+
+    profileSelect.addEventListener("change", () => {
+      const profile = profiles[profileSelect.value];
+      profileCard.innerHTML = `
+        <strong>${profile.title}</strong>
+        <p>${profile.copy}</p>
+        <div class="chips">
+          ${profile.chips.map((chip, index) => `<span class="chip ${index === 0 ? "good" : index === 1 ? "blue" : ""}">${chip}</span>`).join("")}
+        </div>
+      `;
+    });
+
+    sourceSelect.addEventListener("change", () => {
+      if (sourceSelect.value === "unknown") {
+        roleSelect.value = "作为参考";
+        roleSelect.disabled = true;
+      } else {
+        roleSelect.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
